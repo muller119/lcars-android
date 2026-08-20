@@ -67,7 +67,7 @@ class UpdateManager(private val context: Context) {
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
                     val version = extractJsonValue(response, "tag_name")?.removePrefix("v") ?: ""
                     val body = extractJsonValue(response, "body") ?: ""
-                    val apkUrl = extractApkUrl(response)
+                    val apkUrl = extractApkUrl(response) ?: ""
 
                     if (version.isNotEmpty() && apkUrl.isNotEmpty()) {
                         val currentVersion = getCurrentVersion()
