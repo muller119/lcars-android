@@ -29,7 +29,7 @@ jobs:
 
       - name: Generate signing key
         run: |
-          keytool -genkey -v -keystore release.keystore \
+          keytool -genkey -v -keystore app/release.keystore \
             -alias lcars -keyalg RSA -keysize 2048 -validity 10000 \
             -storepass lcars123 -keypass lcars123 \
             -dname "CN=LCARS Dashboard, OU=Home, O=HA, L=NL, ST=NL, C=NL"
