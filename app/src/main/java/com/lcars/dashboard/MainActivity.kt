@@ -3,7 +3,6 @@ package com.lcars.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -24,21 +23,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Fullscreen immersive mode
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowInsetsControllerCompat(window, window.decorView)
         controller.hide(WindowInsetsCompat.Type.systemBars())
         controller.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-        // Keep screen on
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         setContentView(R.layout.activity_main)
 
         webView = findViewById(R.id.webView)
 
-        // WebView settings
         webView.settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
@@ -59,13 +55,6 @@ class MainActivity : AppCompatActivity() {
 
         webView.webChromeClient = WebChromeClient()
 
-        // Settings button
-        findViewById<View>(R.id.settingsButton).setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Load dashboard
         currentUrl = getSharedPreferences("lcars", MODE_PRIVATE)
             .getString("dashboard_url", "http://192.168.1.49:8123/local/lcars-dashboard.html")
             ?: "http://192.168.1.49:8123/local/lcars-dashboard.html"
@@ -77,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         webView.onResume()
 
-        // Re-check URL in case it changed in settings
         val newUrl = getSharedPreferences("lcars", MODE_PRIVATE)
             .getString("dashboard_url", "http://192.168.1.49:8123/local/lcars-dashboard.html")
             ?: "http://192.168.1.49:8123/local/lcars-dashboard.html"
@@ -87,7 +75,6 @@ class MainActivity : AppCompatActivity() {
             webView.loadUrl(currentUrl)
         }
 
-        // Re-hide system bars
         val controller = WindowInsetsControllerCompat(window, window.decorView)
         controller.hide(WindowInsetsCompat.Type.systemBars())
     }
