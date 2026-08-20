@@ -1,0 +1,107 @@
+package com.lcars.dashboard
+
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var webView: WebView
+    private var currentUrl: String = ""
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Fullscreen immersive mode
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        // Keep screen on
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        setContentView(R.layout.activity_main)
+
+        webView = findViewById(R.id.webView)
+
+        // WebView settings
+        webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            loadWithOverviewMode = true
+            useWideViewPort = true
+            builtInZoomControls = true
+            displayZoomControls = false
+            cacheMode = WebSettings.LOAD_DEFAULT
+            mediaPlaybackRequiresUserGesture = false
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        }
+
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                return false
+            }
+        }
+
+        webView.webChromeClient = WebChromeClient()
+
+        // Load dashboard
+        currentUrl = getSharedPreferences("lcars", MODE_PRIVATE)
+            .getString("dashboard_url", "http://homeassistant.local:8123/lcars-dashboard.html")
+            ?: "http://homeassistant.local:8123/lcars-dashboard.html"
+
+        webView.loadUrl(currentUrl)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        webView.onResume()
+
+        // Re-check URL in case it changed in settings
+        val newUrl = getSharedPreferences("lcars", MODE_PRIVATE)
+            .getString("dashboard_url", "http://homeassistant.local:8123/lcars-dashboard.html")
+            ?: "http://homeassistant.local:8123/lcars-dashboard.html"
+
+        if (newUrl != currentUrl) {
+            currentUrl = newUrl
+            webView.loadUrl(currentUrl)
+        }
+
+        // Re-hide system bars
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        webView.onPause()
+    }
+
+    override fun onDestroy() {
+        webView.destroy()
+        super.onDestroy()
+    }
+
+    @Deprecated("Use OnBackPressedCallback instead")
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+}
