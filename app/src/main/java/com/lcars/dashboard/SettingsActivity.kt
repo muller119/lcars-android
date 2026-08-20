@@ -19,8 +19,8 @@ class SettingsActivity : AppCompatActivity() {
 
         // Load current URL
         val prefs = getSharedPreferences("lcars", MODE_PRIVATE)
-        val currentUrl = prefs.getString("dashboard_url", "http://homeassistant.local:8123/lcars-dashboard.html")
-            ?: "http://homeassistant.local:8123/lcars-dashboard.html"
+        val currentUrl = prefs.getString("dashboard_url", "http://192.168.1.49:8123/lcars-dashboard.html")
+            ?: "http://192.168.1.49:8123/lcars-dashboard.html"
         urlInput.setText(currentUrl)
 
         saveButton.setOnClickListener {

@@ -61,8 +61,8 @@ class MainActivity : AppCompatActivity() {
 
         // Load dashboard
         currentUrl = getSharedPreferences("lcars", MODE_PRIVATE)
-            .getString("dashboard_url", "http://homeassistant.local:8123/lcars-dashboard.html")
-            ?: "http://homeassistant.local:8123/lcars-dashboard.html"
+            .getString("dashboard_url", "http://192.168.1.49:8123/lcars-dashboard.html")
+            ?: "http://192.168.1.49:8123/lcars-dashboard.html"
 
         webView.loadUrl(currentUrl)
     }
@@ -73,8 +73,8 @@ class MainActivity : AppCompatActivity() {
 
         // Re-check URL in case it changed in settings
         val newUrl = getSharedPreferences("lcars", MODE_PRIVATE)
-            .getString("dashboard_url", "http://homeassistant.local:8123/lcars-dashboard.html")
-            ?: "http://homeassistant.local:8123/lcars-dashboard.html"
+            .getString("dashboard_url", "http://192.168.1.49:8123/lcars-dashboard.html")
+            ?: "http://192.168.1.49:8123/lcars-dashboard.html"
 
         if (newUrl != currentUrl) {
             currentUrl = newUrl
