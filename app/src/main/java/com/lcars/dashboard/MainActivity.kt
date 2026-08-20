@@ -59,6 +59,12 @@ class MainActivity : AppCompatActivity() {
 
         webView.webChromeClient = WebChromeClient()
 
+        // Settings button
+        findViewById<View>(R.id.settingsButton).setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
         // Load dashboard
         currentUrl = getSharedPreferences("lcars", MODE_PRIVATE)
             .getString("dashboard_url", "http://192.168.1.49:8123/local/lcars-dashboard.html")
