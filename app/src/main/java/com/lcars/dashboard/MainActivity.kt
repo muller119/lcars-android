@@ -67,6 +67,8 @@ class MainActivity : AppCompatActivity() {
             .getString("dashboard_url", "http://192.168.1.49:8123/local/lcars-dashboard.html")
             ?: "http://192.168.1.49:8123/local/lcars-dashboard.html"
 
+        // Clear any cached HTML on startup
+        webView.clearCache(true)
         webView.loadUrl(currentUrl)
     }
 
@@ -80,8 +82,12 @@ class MainActivity : AppCompatActivity() {
 
         if (newUrl != currentUrl) {
             currentUrl = newUrl
-            webView.loadUrl(currentUrl)
+            // Clear cache when URL changes
+            webView.clearCache(true)
+            webView.clearHistory()
         }
+        // Always force load from network (bypass HTML cache)
+        webView.loadUrl(currentUrl)
 
         val controller = WindowInsetsControllerCompat(window, window.decorView)
         controller.hide(WindowInsetsCompat.Type.systemBars())
