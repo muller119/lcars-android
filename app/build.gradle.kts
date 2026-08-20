@@ -17,14 +17,14 @@ android {
 
     signingConfigs {
         create("release") {
-            val keystorePath = System.getenv("KEYSTORE_PATH") ?: "release.keystore"
-            val keystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: "lcars123"
-            val keyAlias = System.getenv("KEY_ALIAS") ?: "lcars"
-            val keyPassword = System.getenv("KEY_PASSWORD") ?: "lcars123"
-            storeFile = file(keystorePath)
-            storePassword = keystorePassword
-            this.keyAlias = keyAlias
-            keyPassword = keyPassword
+            val ksPath = System.getenv("KEYSTORE_PATH") ?: "release.keystore"
+            val ksPass = System.getenv("KEYSTORE_PASSWORD") ?: "lcars123"
+            val kAlias = System.getenv("KEY_ALIAS") ?: "lcars"
+            val kPass = System.getenv("KEY_PASSWORD") ?: "lcars123"
+            storeFile = file(ksPath)
+            storePassword = ksPass
+            keyAlias = kAlias
+            keyPassword = kPass
         }
     }
 
