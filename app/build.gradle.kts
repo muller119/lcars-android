@@ -9,16 +9,30 @@ android {
 
     defaultConfig {
         applicationId = "com.lcars.dashboard"
-        minSdk = 27
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("KEYSTORE_PATH") ?: "release.keystore"
+            val keystorePassword = System.getenv("KEYSTORE_PASSWORD") ?: "lcars123"
+            val keyAlias = System.getenv("KEY_ALIAS") ?: "lcars"
+            val keyPassword = System.getenv("KEY_PASSWORD") ?: "lcars123"
+            storeFile = file(keystorePath)
+            storePassword = keystorePassword
+            this.keyAlias = keyAlias
+            keyPassword = keyPassword
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
